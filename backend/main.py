@@ -3,14 +3,20 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
 import models
+from prometheus_fastapi_instrumentator import Instrumentator  # 1. Import it
 
 # Initialize the FastAPI app
 app = FastAPI(title="GenAI Log Analyzer")
+
+# 2. Wire up the instrumentator to track metrics and expose /metrics
+Instrumentator().instrument(app).expose(app)
+
 
 # 1. Root health check endpoint
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the GenAI Log Analyzer API!"}
+
 
 # 2. Endpoint to create a new log entry (Updated with Ollama!)
 @app.post("/logs/")
