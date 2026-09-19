@@ -1,0 +1,30 @@
+name: CI Pipeline
+
+# 1. When does this pipeline run?
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+# 2. What jobs should it run?
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest # Runs on a clean virtual Linux machine in GitHub's cloud
+
+    steps:
+    # Step A: Download your repository code onto the runner
+    - name: Check out code
+      uses: actions/checkout@v4
+
+    # Step B: Set up Python environment
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10' # Match the Python version you use locally
+
+    # Step C: Run a simple verification command
+    - name: Verify python and environment
+      run: |
+        python --version
+        pip list
